@@ -9,10 +9,16 @@ module.exports = app => {
     })
 
     app.post("/api/notes", function(req, res){
-        fs.appendFile("db.json", JSON.stringify(req.body, null, 2), err => {
-            if(err) throw err;
-            res.send(req.body)
+        fs.readFile("db/db.json",(err, data) =>{
+            let parsedDoc = JSON.parse(data);
+            parsedDoc.push(req.body);
+            fs.writeFile("db/db.json", JSON.stringify(parsedDoc, null, 2), err => {
+                if(err) throw err;
+                res.send(req.body)
+            })
         })
     })
-
+    app.delete("/api/notes/:id", function(req, res){
+        
+    })
 }
